@@ -6,7 +6,7 @@
   "directories": {
     "lib": "lib"
   },
- "scripts": {
+  "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -41,6 +41,7 @@
     "card": "^2.5.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "drizzle-orm": "^0.36.0",
     "drizzle-zod": "^0.5.1",
     "dropdown-menu": "^0.1.1",
