@@ -12,10 +12,11 @@ import { useNewTransaction } from "../hooks/use-new-transaction";
 import { useCreateTransaction } from "../api/use-create-transaction";
 import { useCreateCategory } from "@/features/categories/api/use-create-categories";
 import { useGetCategories } from "@/features/categories/api/use-get-categories";
-import { useGetAccount } from "@/features/accounts/api/use-get-account";
+
 import { useCreateAccount } from "@/features/accounts/api/use-create-account";
 import { TransactionForm } from "./transaction-form";
 import { Loader2 } from "lucide-react";
+import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
 
 const formSchema = insertTransactionSchema.omit({
   id: true,
@@ -27,7 +28,7 @@ export const NewTransactionSheet = () => {
   const { isOpen, onClose } = useNewTransaction();
   const createmutation = useCreateTransaction(); // Move this inside the component
 
-  const accountQuery = useGetAccount();
+  const accountQuery = useGetAccounts();
   const accountMutation = useCreateAccount();
   
   const onCreateAccount = (name: string) => {

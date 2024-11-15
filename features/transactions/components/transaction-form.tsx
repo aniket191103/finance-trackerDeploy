@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { insertAccountSchema, insertTransactionSchema } from "@/db/schema";
+import { insertTransactionSchema } from "@/db/schema";
 import {
   Form,
   FormControl,
@@ -17,9 +17,10 @@ import {
 
 import { Select } from "@/components/select";
 import { DatePicker } from "@/components/date-picker";
-import { Dialog } from "@radix-ui/react-dialog";
+
 import { Textarea } from "@/components/ui/textarea";
 import { AmountInput } from "@/components/amount-input";
+import { convertAmountToMilliUnits } from "@/lib/utils";
 
 const formSchema = z.object({
   date: z.coerce.date(),
@@ -42,8 +43,10 @@ type Props = {
   onSubmit: (values: ApiFormValues) => void;
   onDelete?: () => void;
   disabled?: boolean;
+
   accountOptions: { label: string; value: string }[];
   categoryOptions: { label: string; value: string }[];
+
   onCreateAccount: (name: string) => void;
   onCreateCategory: (name: string) => void;
 };
@@ -65,12 +68,21 @@ export const TransactionForm = ({
   });
 
   const handleSubmit = (values: FormValues) => {
-    console.log();
+    const amount = parseFloat(values.amount);
+    const amountInMiliunits = convertAmountToMilliUnits(amount);
+    console.log(values);
+
+    onSubmit({
+      ...values,
+      amount: amountInMiliunits,
+    });
   };
 
   const handleDelete = () => {
     onDelete?.();
   };
+
+  console.log("vfhsdbjak" + accountOptions);
 
   return (
     <Form {...form}>
@@ -78,23 +90,22 @@ export const TransactionForm = ({
         onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-4 pt-4"
       >
-<FormField
+        <FormField
           control={form.control}
           name="date"
           render={({ field }) => (
             <FormItem>
               <FormControl>
                 <DatePicker
-                value={field.value}
-                onChange={field.onChange}
-                disabled={disabled}
-                /> 
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={disabled}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
 
         <FormField
           control={form.control}
@@ -125,7 +136,7 @@ export const TransactionForm = ({
               <FormLabel>Category</FormLabel>
               <FormControl>
                 <Select
-                  placeholder="Select an account"
+                  placeholder="Select an category"
                   options={categoryOptions}
                   onCreate={onCreateCategory}
                   value={field.value}
@@ -137,7 +148,7 @@ export const TransactionForm = ({
             </FormItem>
           )}
         />
-         <FormField
+        <FormField
           control={form.control}
           name="payee"
           render={({ field }) => (
@@ -145,21 +156,17 @@ export const TransactionForm = ({
               <FormLabel>Payee</FormLabel>
               <FormControl>
                 <Input
-                disabled={disabled}
-                placeholder="Add a payee"
-                {...field}
+                  disabled={disabled}
+                  placeholder="Add a payee"
+                  {...field}
                 />
-
               </FormControl>
               <FormMessage />
             </FormItem>
-          )} />
+          )}
+        />
 
-
-
-
-
-<FormField
+        <FormField
           control={form.control}
           name="amount"
           render={({ field }) => (
@@ -167,18 +174,17 @@ export const TransactionForm = ({
               <FormLabel>Amount</FormLabel>
               <FormControl>
                 <AmountInput
-                {...field}
-                disabled={disabled}
-                placeholder="0.00"
+                  {...field}
+                  disabled={disabled}
+                  placeholder="0.00"
                 />
-
               </FormControl>
               <FormMessage />
             </FormItem>
-          )} />
+          )}
+        />
 
-
-<FormField
+        <FormField
           control={form.control}
           name="notes"
           render={({ field }) => (
@@ -186,22 +192,19 @@ export const TransactionForm = ({
               <FormLabel>Notes</FormLabel>
               <FormControl>
                 <Textarea
-                {...field}
-                value={field.value ?? "" }
-                disabled={disabled}
-                placeholder="Optional notes"
+                  {...field}
+                  value={field.value ?? ""}
+                  disabled={disabled}
+                  placeholder="Optional notes"
                 />
-
               </FormControl>
               <FormMessage />
             </FormItem>
-          )} />
-
-
-
+          )}
+        />
 
         <Button disabled={disabled} className="w-full">
-          {id ? "Save Changes" : "Create Account"}
+          {id ? "Save Changes" : "Create Transaction !"}
         </Button>
 
         {!!id && (
@@ -213,7 +216,7 @@ export const TransactionForm = ({
             variant="outline"
           >
             <Trash className="size-4 mr-2" />
-            Delete Account!
+            Delete Transaction!
           </Button>
         )}
       </form>
