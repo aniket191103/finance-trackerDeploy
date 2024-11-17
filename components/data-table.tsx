@@ -33,8 +33,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey: string;
-  onDelete:(rows:Row<TData>[])=>void;
-  disabled?:boolean
+  onDelete: (rows: Row<TData>[]) => void;
+  disabled?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -42,10 +42,12 @@ export function DataTable<TData, TValue>({
   data,
   filterKey,
   onDelete,
-  disabled
-
+  disabled,
 }: DataTableProps<TData, TValue>) {
-const [ConfirmDialog,confirm]=useConfirm("Are you sure?","You are About to bulk delete.")
+  const [ConfirmDialog, confirm] = useConfirm(
+    "Are you sure?",
+    "You are About to bulk delete."
+  );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -71,37 +73,35 @@ const [ConfirmDialog,confirm]=useConfirm("Are you sure?","You are About to bulk 
 
   return (
     <div>
-      <ConfirmDialog/>
+      <ConfirmDialog />
       <div className="flex items-center py-4">
-        <Input
-          placeholder={`Filter ${filterKey}...`}
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />{
-            table.getFilteredSelectedRowModel().rows.length>0&&(
-                <Button
-                disabled={disabled}
-                size="sm"
-                variant="outline"
-                className="ml-auto  font-normal text-xs"
-                onClick={async()=>{
+      <Input
+  placeholder={`Filter ${filterKey}...`}
+  value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
+  onChange={(event) =>
+    table.getColumn(filterKey)?.setFilterValue(event.target.value)
+  }
+  className="max-w-sm"
+/>
 
-const ok = await confirm();
-                    if(ok){
-
-                      onDelete(table.getFilteredSelectedRowModel().rows)
-                      table.resetRowSelection();
-                    }
-                }}
-                >
-                    <Trash className="size-4 mr-2"/>
-                    Delete ({table.getFilteredSelectedRowModel().rows.length})
-                </Button>
-            )
-        }
+        {table.getFilteredSelectedRowModel().rows.length > 0 && (
+          <Button
+            disabled={disabled}
+            size="sm"
+            variant="outline"
+            className="ml-auto  font-normal text-xs"
+            onClick={async () => {
+              const ok = await confirm();
+              if (ok) {
+                onDelete(table.getFilteredSelectedRowModel().rows);
+                table.resetRowSelection();
+              }
+            }}
+          >
+            <Trash className="size-4 mr-2" />
+            Delete ({table.getFilteredSelectedRowModel().rows.length})
+          </Button>
+        )}
       </div>
       <div className="rounded-md border">
         <Table>

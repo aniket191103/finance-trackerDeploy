@@ -56,6 +56,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.1",
+    "react-papaparse": "^4.4.0",
     "react-remove-scroll": "^2.6.0",
     "react-select": "^5.8.3",
     "react-use": "^17.5.1",

@@ -79,7 +79,8 @@ export const NewTransactionSheet = () => {
           <Loader2 className="size-4 text-muted-foreground animate-spin"/>
           </div>
         ):(
-          <TransactionForm onSubmit={onSubmit}
+          <TransactionForm 
+          onSubmit={onSubmit}
            disabled={isPending} 
            categoryOptions={categoryOptions}
             onCreateCategory={onCreateCategory} 

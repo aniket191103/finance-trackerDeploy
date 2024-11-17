@@ -1,8 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { useDeleteAccount } from "@/features/accounts/api/use-delete-account";
-import { useOpenAccount } from "@/features/hooks/use-open-account";
+import { useDeleteTransaction } from "@/features/transactions/api/use-delete-transaction";
+import { useOpenTransaction } from "@/features/transactions/hooks/use-open-account";
 import { useConfirm } from "@/hooks/use-confirm";
 import {DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuTrigger} from "@radix-ui/react-dropdown-menu"
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
@@ -11,10 +11,10 @@ import { Edit, MoreHorizontal, Trash } from "lucide-react";
     id:string;
 }
 export const Actions=({id}:Props)=>{
-const [ConfirmDialog,confirm] =useConfirm("Are you sure ?","You are about to delete this account ")
+const [ConfirmDialog,confirm] =useConfirm("Are you sure ?","You are about to delete this transaction ")
 
-const {onOpen} =useOpenAccount();
-const deleteMutation = useDeleteAccount(id);
+const {onOpen} =useOpenTransaction();
+const deleteMutation = useDeleteTransaction(id);
 const handleDelete =async()=>{
     const ok = await confirm();
     if(ok){
