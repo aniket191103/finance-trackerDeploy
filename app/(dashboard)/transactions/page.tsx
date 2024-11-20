@@ -8,32 +8,41 @@ import { columns } from "./column";
 import { DataTable } from "@/components/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
-
 import { useNewTransaction } from "@/features/transactions/hooks/use-new-transaction";
 import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transaction";
 import { useGetTransactions } from "@/features/transactions/api/use-get-transactions";
 import { useState } from "react";
 import { UploadButton } from "./upload-button";
-
-
+import { ImportCard } from "./import-card";
+import { log } from "console";
 
 enum VARIANT {
-  LIST="LIST",
-  IMPORT ="IMPORT"
+  LIST = "LIST",
+  IMPORT = "IMPORT",
+}
+
+const INITIAL_IMPORT_RESULTS = {
+  data: [],
+  errors: [],
+  meta: {},
 };
 
-const INITIAL_IMPORT_RESULTS={
-  date :[],
-  errors: [],
-  meta : {}
-}
-
 const TransactionPage = () => {
+  const [variant, setVariant] = useState<VARIANT>(VARIANT.LIST);
+  const [importResults, setImportResults] = useState(INITIAL_IMPORT_RESULTS);
 
-  const [variant ,setVariant]= useState<VARIANT>(VARIANT.LIST);
-const  onUpload = (results :typeof INITIAL_IMPORT_RESULTS)=>{
-  setVariant (VARIANT.IMPORT)
-}
+  const onUpload = (results: typeof INITIAL_IMPORT_RESULTS) => {
+    console.log(results);
+
+    setImportResults(results);
+    setVariant(VARIANT.IMPORT);
+  };
+
+  const onCancelImport = () => {
+    setImportResults(INITIAL_IMPORT_RESULTS);
+    setVariant(VARIANT.LIST);
+  };
+
   const newTransaction = useNewTransaction();
   const transactionQuery = useGetTransactions();
   const deleteTransaction = useBulkDeleteTransactions();
@@ -60,16 +69,16 @@ const  onUpload = (results :typeof INITIAL_IMPORT_RESULTS)=>{
     );
   }
 
-
-
-  if(variant=== VARIANT.IMPORT){
-    return(
+  if (variant === VARIANT.IMPORT) {
+    return (
       <>
-      <div>
-        THIS IS SCREEN FOR IMPORt
-        </div>
-        </>
-    )
+        <ImportCard
+          data={importResults.data}
+          onCancel={onCancelImport}
+          onSubmit={() => {}}
+        />
+      </>
+    );
   }
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
@@ -79,18 +88,12 @@ const  onUpload = (results :typeof INITIAL_IMPORT_RESULTS)=>{
             Transaction History
           </CardTitle>
           <div className="flex items-center gap-x-2">
+            <Button size="sm" onClick={newTransaction.onOpen}>
+              <Plus className="size-4 mr-2" />
+              Add new
+            </Button>
 
-          <Button size="sm" onClick={newTransaction.onOpen}>
-            <Plus className="size-4 mr-2" />
-            Add new
-          </Button>
-
-
-          <UploadButton
-          onUpload ={
-            onUpload
-          }
-          />
+            <UploadButton onUpload={onUpload} />
           </div>
         </CardHeader>
         <CardContent>
