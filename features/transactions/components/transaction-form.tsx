@@ -70,7 +70,6 @@ export const TransactionForm = ({
   const handleSubmit = (values: FormValues) => {
     const amount = parseFloat(values.amount);
     const amountInMiliunits = convertAmountToMilliUnits(amount);
-    console.log(values);
 
     onSubmit({
       ...values,
@@ -82,7 +81,6 @@ export const TransactionForm = ({
     onDelete?.();
   };
 
-  console.log("vfhsdbjak" + accountOptions);
 
   return (
     <Form {...form}>
