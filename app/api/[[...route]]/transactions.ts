@@ -195,44 +195,54 @@ const app = new Hono()
       const auth = getAuth(c);
       const { id } = c.req.valid("param");
       const values = c.req.valid("json");
-
+  
       if (!id) {
         return c.json({ error: "Missing id" }, 400);
       }
-
+  
       if (!auth?.userId) {
         return c.json({ error: "Unauthorized" }, 401);
       }
-
-      const transactionToUpdate = db
-        .$with("transaction_to_update")
-        .as(
-          db
-            .select({ id: transaction.id })
-            .from(transaction)
-            .innerJoin(accounts, eq(transaction.accountId, accounts.id))
-            .where(and(eq(transaction.id, id), eq(accounts.userId, auth.userId)))
-        );
-
-      const [data] = await db
-        .with(transactionToUpdate)
-        .update(transaction)
-        .set(values)
-        .where(
-          inArray(
-            transaction.id,
-            sql`select id from ${transactionToUpdate}`
+  
+      // Define a common table expression (CTE) for transactions to update
+      const transactionToUpdate = db.$with("transaction_to_update").as(
+        db
+          .select({
+            id: transaction.id,
+          })
+          .from(transaction)
+          .innerJoin(accounts, eq(transaction.accountId, accounts.id))
+          .where(
+            and(
+              eq(transaction.id, id),
+              eq(accounts.userId, auth.userId)
+            )
           )
-        )
-        .returning();
-
-      if (!data) {
-        return c.json({ error: "Not Found" }, 404);
+      );
+  
+      try {
+        const [data] = await db
+          .with(transactionToUpdate)
+          .update(transaction)
+          .set(values)
+          .where(
+            sql`transaction.id IN (SELECT id FROM transaction_to_update)`
+          )
+          .returning();
+  
+        if (!data) {
+          return c.json({ error: "Not Found" }, 404);
+        }
+  
+        return c.json({ data });
+      } catch (error) {
+        console.error("Update error:", error); // Log the error for debugging
+        return c.json({ error: "Internal Server Error" }, 500);
       }
-
-      return c.json({ data });
     }
   )
+  
+  
   .delete(
     "/:id",
     clerkMiddleware(),

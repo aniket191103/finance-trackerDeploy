@@ -14,7 +14,7 @@ export const useEditTransaction = (id?: string) => {
             const response = await client.api.transactions[":id"]["$patch"]({ json, param: { id } });
             if (!response.ok) {
                 // Throw an error for react-query to handle it in onError.
-                throw new Error('Failed to create transactions');
+                throw new Error('Failed to edit transactions');
             }
             return (await response.json()) as ResponseType;
         },
