@@ -1,3 +1,4 @@
+import DataGrid from "@/components/data-grid"
 
 const DashboardPage = () => {
   return (
