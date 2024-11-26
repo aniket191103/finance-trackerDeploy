@@ -3,6 +3,7 @@ import { convertAmountFromMilliUnits } from '@/lib/utils';
 
 
 import { useQuery } from '@tanstack/react-query'
+import { log } from 'console';
 import { useSearchParams } from 'next/navigation';
 
 console.log(client);
@@ -31,6 +32,9 @@ export const useGetSummary = () => {
             }
 
             const { data } = await response.json();
+
+            console.log("Raw data fetched from API:", data);
+            
             return{
                 ...data ,
                 incomeAmount:convertAmountFromMilliUnits(data.incomeAmount),
@@ -46,6 +50,8 @@ export const useGetSummary = () => {
                     expenses:convertAmountFromMilliUnits(day.expenses)
 
                 }))
+
+                
             } ;
         }
     })

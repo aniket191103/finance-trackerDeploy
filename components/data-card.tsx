@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { CountUp } from "./count-up";
+import { Skeleton } from "./ui/skeleton";
 
 const boxVariant = cva("rounded-md p-3 shrink-0", {
   variants: {
@@ -72,28 +73,45 @@ const DataCard = ({
       </CardHeader>
       <CardContent>
         <h1 className=" font-bold text-2xl mb-2 line-clamp-1 break-all">
-          <CountUp 
-          preserveValue
-          start={0}
-          end={value}
-          decimals={2}
-          decimalPlaces={2}
-          formattingFn={formatCurrency}
+          <CountUp
+            preserveValue
+            start={0}
+            end={value}
+            decimals={2}
+            decimalPlaces={2}
+            formattingFn={formatCurrency}
           />
         </h1>
-        <p className={cn ( "text-muted-foreground text-sm line-clamp-1 ",
-            percentageChange>0  && "text-emerald-500",
-            percentageChange<0  && "text-rose-500"
-
-
-        )}>
-            {
-                formatPercentage(percentageChange)  
-            }  from last period
+        <p
+          className={cn(
+            "text-muted-foreground text-sm line-clamp-1 ",
+            percentageChange > 0 && "text-emerald-500",
+            percentageChange < 0 && "text-rose-500"
+          )}
+        >
+          {formatPercentage(percentageChange,{addPrefix:true})} from last period
         </p>
       </CardContent>
     </Card>
   );
 };
 
+
+export const DataCardLoading =()=>{
+  return (
+    <Card className=" border-none drop-shadow-sm h-[192px]">
+      <div className=" space-y-2">
+        <Skeleton className="h-6 w-24"/>
+        <Skeleton className="h-4 w-40"/>
+
+      </div>
+
+
+      <div className=" size-12">
+        <Skeleton className="shrink-0 h-10 w-24 mb-2"/>
+        <Skeleton className="shrink-0 h-4 w-40"/>
+      </div>
+    </Card>
+  )
+}
 export default DataCard;

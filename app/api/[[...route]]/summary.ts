@@ -100,11 +100,12 @@ const app = new Hono()
     }
 
     const activeDays = await db
-      .select({
-        date: transaction.date,
-        income: sql`SUM(CASE WHEN ${transaction.amount} >= 0 THEN ${transaction.amount} ELSE 0 END)`.mapWith(Number),
-        expenses: sql`SUM(CASE WHEN ${transaction.amount} < 0 THEN ${transaction.amount} ELSE 0 END)`.mapWith(Number),
-      })
+    .select({
+      date: transaction.date,
+      income: sql`SUM(CASE WHEN ${transaction.amount} >= 0 THEN ${transaction.amount} ELSE 0 END)`.mapWith(Number),
+      expenses: sql`SUM(CASE WHEN ${transaction.amount} < 0 THEN ABS(${transaction.amount}) ELSE 0 END)`.mapWith(Number),
+    })
+    
       .from(transaction)
       .innerJoin(accounts, eq(transaction.accountId, accounts.id))
       .where(
