@@ -9,7 +9,6 @@ import {
   useReactTable,
   SortingState,
   getSortedRowModel,
-  ColumnFilter,
   getFilteredRowModel,
   ColumnFiltersState,
   Row,

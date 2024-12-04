@@ -4,7 +4,7 @@ import {
   Legend,
   RadialBarChart,
   ResponsiveContainer,
-  Tooltip,
+  
 } from "recharts";
 
 // Define your color palette for pie slices

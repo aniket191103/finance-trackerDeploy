@@ -2,11 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
+  ClerkProvider
 } from '@clerk/nextjs'
 import { QueryProvider } from "@/providers/query-provider";
 import { SheetProvider } from "@/providers/sheet-provider";

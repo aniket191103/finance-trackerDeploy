@@ -18,7 +18,7 @@ export default function SettingsPage() {
       }
     };
 
-    // showAlert();
+    showAlert();
   }, [router]);
 
   return (

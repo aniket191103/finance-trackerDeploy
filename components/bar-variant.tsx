@@ -1,5 +1,5 @@
 import { format, parseISO } from 'date-fns';
-import { Tooltip, XAxis, BarChart, Bar, ResponsiveContainer, CartesianGrid, YAxis } from 'recharts';
+import { Tooltip, XAxis, BarChart, Bar, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { CustomToolTip } from './custom-tooltip';
 
 type Props = {

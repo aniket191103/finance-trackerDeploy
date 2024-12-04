@@ -7,7 +7,7 @@ import { DateRange } from "react-day-picker";
 
 import qs from "query-string";
 import { ChevronDown } from "lucide-react";
-import { cn, formatDateRange } from "@/lib/utils";
+import { formatDateRange } from "@/lib/utils";
 import { Button } from "./button";
 import { Calendar } from "./calendar";
 import {

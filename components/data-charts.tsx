@@ -3,7 +3,6 @@
 import { useGetSummary } from "@/features/summary/api/use-get-summary";
 import { Chart, ChartLoading } from "./Chart";
 import { SpendingPie, SpendingPieLoading } from "./spending-pie";
-import { Loader2 } from "lucide-react";
 
 export const DataCharts = () => {
   const { data, isLoading } = useGetSummary();

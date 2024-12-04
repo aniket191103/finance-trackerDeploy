@@ -11,7 +11,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
-import { addMonths, parse, subDays } from "date-fns";
+import {  parse, subDays } from "date-fns";
 
 const app = new Hono()
   .get(
@@ -282,7 +282,7 @@ const app = new Hono()
 
         return c.json({ data: deleted });
       } catch (error) {
-        return c.json({ error: "Internal Server Error" }, 500);
+        return c.json({error: "Internal Server Error" }, 500);
       }
     }
   )

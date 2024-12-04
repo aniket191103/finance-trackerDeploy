@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -17,7 +19,7 @@ interface SelectedColumnState {
 type Props = {
   data: string[][];
   onCancel: () => void;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: any) => void; // Kept `any` to avoid breaking changes
 };
 
 export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
@@ -26,10 +28,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
   const body = data.slice(1);
 
   // Function to handle table head select changes
-  const onTableHeadSelectChange = (
-    columnIndex: number,
-    value: string | null
-  ) => {
+  const onTableHeadSelectChange = (columnIndex: number, value: string | null) => {
     setSelectedColumn((prev) => {
       const newSelectedColumns = { ...prev };
 
@@ -41,37 +40,31 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
       if (value === "skip") {
         value = null;
       }
-      newSelectedColumns[`column_${columnIndex}`] = value; // Reset duplicate value
+      newSelectedColumns[`column_${columnIndex}`] = value; // Keep logic the same
       return newSelectedColumns;
     });
   };
 
   const progress = Object.values(selectColumn).filter(Boolean).length;
+
   const handleContinue = () => {
-    const getColumnIndex = (column: string) => {
-      return column.split("_")[1];
-    };
     const mappedData = {
       headers: headers.map((_header, index) => {
-        const columnIndex = getColumnIndex(`column_${index}`);
         return selectColumn[`column_${index}`] || null;
       }),
-      body: body
-        .map((row) => {
-          const transformedRow = row.map((cell, index) => {
-            const columnIndex = getColumnIndex(`column_${index}`);
-            return selectColumn[`column_${index}`] ? cell : null;
-          });
+      body: body.map((row) => {
+        const transformedRow = row.map((cell, index) => {
+          return selectColumn[`column_${index}`] ? cell : null;
+        });
 
-          return transformedRow.every((item) => item === null)
-            ? []
-            : transformedRow;
-        })
-        .filter((row) => row.length > 0),
+        return transformedRow.every((item) => item === null)
+          ? []
+          : transformedRow;
+      }).filter((row) => row.length > 0),
     };
 
     const arrayOfData = mappedData.body.map((row) => {
-      return row.reduce((acc: any, cell, index) => {
+      return row.reduce((acc: Record<string, any>, cell, index) => { // Kept `any` here
         const header = mappedData.headers[index];
         if (header != null) {
           acc[header] = cell;
@@ -79,15 +72,15 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
         return acc;
       }, {});
     });
+
     const formatedData = arrayOfData.map((item) => {
-      // console.log("Raw date:", item.date); // Check raw date
       try {
         return {
           ...item,
           amount: convertAmountToMilliUnits(parseFloat(item.amount)),
           date: item.date
             ? format(
-                parse(item.date.trim(), dateFormat, new Date()), // Trim whitespace
+                parse(item.date.trim(), dateFormat, new Date()),
                 outputFormat
               )
             : null,
@@ -97,7 +90,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
         return {
           ...item,
           amount: convertAmountToMilliUnits(parseFloat(item.amount)),
-          date: null, // Fallback if parsing fails
+          date: null,
         };
       }
     });
