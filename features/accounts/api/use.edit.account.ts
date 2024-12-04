@@ -23,6 +23,8 @@ export const useEditAccount = (id?: string) => {
             queryClient.invalidateQueries({ queryKey: ["accounts",{id}] });
             queryClient.invalidateQueries({ queryKey: ["accounts"] });
             queryClient.invalidateQueries({ queryKey: ["transactions"] });
+            queryClient.invalidateQueries({ queryKey: ["summary"] });
+
 
         },
         onError: () => {

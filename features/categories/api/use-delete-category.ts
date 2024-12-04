@@ -22,6 +22,8 @@ export const useDeleteCategory = (id?: string) => {
             queryClient.invalidateQueries({ queryKey: ["categories",{id}] });
             queryClient.invalidateQueries({ queryKey: ["categories"] });
             queryClient.invalidateQueries({ queryKey: ["transactions"] });
+            queryClient.invalidateQueries({ queryKey: ["summary"] });
+
 
         },
         onError: () => {

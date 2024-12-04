@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileSearch, PieChart, Radar, Target } from "lucide-react"; // Icons for Pie, Radar, and Target charts
-import { ResponsiveContainer, Pie, Cell, Tooltip, Legend, RadarChart, Radar as RadarRechart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar as RadarComponent } from "recharts"; // Recharts components
+import { FileSearch, Loader2, PieChart, Radar, Target } from "lucide-react"; // Icons for Pie, Radar, and Target charts
+
 import {
   Select,
   SelectTrigger,
@@ -12,6 +12,7 @@ import {
 import { PieVariant } from "./pie-variant";
 import { RadarVariant } from "./radar-variant";
 import { RadialVariant } from "./radial-variant";
+import { Skeleton } from "./ui/skeleton";
 
 type Props = {
   data?: {
@@ -67,18 +68,31 @@ export const SpendingPie = ({ data = [] }: Props) => {
         {data.length === 0 ? (
           <div className="flex flex-col gap-y-4 items-center justify-center h-[350px] w-full">
             <FileSearch className="text-muted-foreground" size={48} />
-            <p className="text-muted-foreground text-sm">No data for this Period</p>
+            <p className="text-muted-foreground text-sm">
+              No data for this Period
+            </p>
           </div>
-        )  :(
+        ) : (
           <>
-          {selectedChart==="pie" && <PieVariant data={data}/>}
-          {selectedChart==="radar" &&<RadarVariant data={data}/>}
-          {selectedChart==="radial" &&<RadialVariant data={data}/>}
-
+            {selectedChart === "pie" && <PieVariant data={data} />}
+            {selectedChart === "radar" && <RadarVariant data={data} />}
+            {selectedChart === "radial" && <RadialVariant data={data} />}
           </>
-        )
-        }
+        )}
       </CardContent>
+    </Card>
+  );
+};
+
+export const SpendingPieLoading = () => {
+  return (
+    <Card className=" border-none drop-shadow-sm">
+      <CardHeader className=" fle scroll-py-2 lg:space-y-0 lg:flex-row">
+        <Skeleton className=" h-8 w-48" />
+        <Skeleton className=" h-8 lg:w-[120px] w-full" />
+      </CardHeader>
+      <div className="h-[350px] w-full flex items-center justify-center"> </div>
+      <Loader2 className="h-6 w-6 text-slate-300 animate-spin" />
     </Card>
   );
 };
