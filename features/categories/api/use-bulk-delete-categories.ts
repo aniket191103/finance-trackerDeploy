@@ -1,6 +1,6 @@
 import { client } from '@/lib/hono';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { InferResponseType, InferRequestType } from 'hono';
+import { InferResponseType } from 'hono';
 import { toast } from 'sonner';
 
 type ResponseType = InferResponseType<typeof client.api.categories["bulk-delete"]["$post"]>;
