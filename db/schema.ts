@@ -3,6 +3,10 @@ import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 import { createInsertSchema } from 'drizzle-zod'
 import { z } from "zod";
 
+
+
+
+
 export const accounts = pgTable(
     "accounts", {
     id: text("id").primaryKey(),
@@ -70,3 +74,29 @@ export const insertTransactionSchema=createInsertSchema(transaction,{
 })
 
 
+
+// Define the `user_subscription` table
+export const userSubscription = pgTable(
+    "user_subscription",
+    {
+        userId: text("user_id").primaryKey(),
+        subscriptionTier: text("subscription_tier").default("Free").notNull(),
+        startDate: timestamp("start_date", { mode: "date" }).notNull(),
+        endDate: timestamp("end_date", { mode: "date" }), // Make endDate nullable in the database
+    }
+);
+
+// Define relations for `user_subscription`
+export const userSubscriptionRelations = relations(userSubscription, ({ one }) => ({
+    user: one(accounts, {
+        fields: [userSubscription.userId],
+        references: [accounts.id],
+    }),
+}));
+
+// Zod schema for insertion
+export const insertUserSubscriptionSchema = createInsertSchema(userSubscription, {
+    subscriptionTier: z.enum(["Free", "Basic", "Premium"]).default("Free"),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date().optional(), // endDate is optional when inserting
+});

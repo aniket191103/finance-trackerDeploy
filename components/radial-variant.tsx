@@ -19,19 +19,19 @@ type Props = {
 
 export const RadialVariant = ({ data = [] }: Props) => {
   return (
-    <ResponsiveContainer width="100%" height={350}>
+    <ResponsiveContainer width="100%" height={350} >
       <RadialBarChart
         cx="50%"
-        cy="30%"
+        cy="50%"
         barSize={10}
-        innerRadius="90%"
-        outerRadius="40$"
+        innerRadius="80%"
+        outerRadius="100%"
         data={data.map((item, index) => ({
           ...item,
           fill: colors[index % colors.length],
         }))}
       >
-        <RadialBar label={{position:"insideStart",fill:"#fff", fontSize:"12px"}} background dataKey="value"/>
+        <RadialBar label={{position:"insideStart",fill:"#fff", fontSize:"12px", fontWeight:"500"}} background dataKey="value"/>
         <Legend
           layout="horizontal"
           verticalAlign="bottom"

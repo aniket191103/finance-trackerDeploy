@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import SubscriptionComponent from './subscription';
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -33,6 +34,11 @@ export default function SettingsPage() {
         >
           Go to Main Page
         </button>
+      </div>
+
+
+      <div>
+        {/* <SubscriptionComponent/> */}
       </div>
     </div>
   );
