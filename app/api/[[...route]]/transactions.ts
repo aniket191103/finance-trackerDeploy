@@ -309,8 +309,7 @@ const app = new Hono()
           ...value,
         }))
       )
-      .returning();
-
+      .returning()
       return c.json({ success: true, data });
     }
   );

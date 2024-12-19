@@ -79,20 +79,22 @@ export const insertTransactionSchema=createInsertSchema(transaction,{
 export const userSubscription = pgTable(
     "user_subscription",
     {
-        userId: text("user_id").primaryKey(),
-        subscriptionTier: text("subscription_tier").default("Free").notNull(),
-        startDate: timestamp("start_date", { mode: "date" }).notNull(),
-        endDate: timestamp("end_date", { mode: "date" }), // Make endDate nullable in the database
+      userId: text("user_id").primaryKey(),  // user_id field
+      subscriptionTier: text("subscription_tier").default("Free").notNull(), // subscription tier
+      startDate: timestamp("start_date", { mode: "date" }).notNull(),  // subscription start date
+      endDate: timestamp("end_date", { mode: "date" }).notNull(),  // subscription end date
     }
-);
+  );
+  
+  
 
 // Define relations for `user_subscription`
-export const userSubscriptionRelations = relations(userSubscription, ({ one }) => ({
-    user: one(accounts, {
-        fields: [userSubscription.userId],
-        references: [accounts.id],
-    }),
-}));
+// export const userSubscriptionRelations = relations(userSubscription, ({ one }) => ({
+//     user: one(accounts, {
+//         fields: [userSubscription.userId],
+//         references: [accounts.id],
+//     }),
+// }));
 
 // Zod schema for insertion
 export const insertUserSubscriptionSchema = createInsertSchema(userSubscription, {
